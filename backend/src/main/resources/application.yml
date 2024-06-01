@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5500/f1-db
+    driver-class-name: org.postgresql.Driver
+    username: root
+    password: root
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        hbm2ddl.auto: validate
+  flyway:
+    enabled: true
+jwt.token:
+  secret: a1ce6339c451ddbdc126e08d6274508ac8a04c3534a62498f9dafce3e3bebd96
+  validityMinutes: 60
