@@ -16,6 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import type { Team } from "./Teams";
+import { Token } from "@mui/icons-material";
 
 type FormValues = {
   name: string;
@@ -45,7 +46,6 @@ export default function TeamDetail() {
   });
   console.log(form);
   const {
-    register,
     handleSubmit,
     reset,
     control,
@@ -83,6 +83,7 @@ export default function TeamDetail() {
       try {
         const data = (await axios.get(`http://localhost:8080/team/${teamId}`))
           .data;
+        console.log(data);
         setTeam(data);
         reset({
           name: data.name,
@@ -91,6 +92,7 @@ export default function TeamDetail() {
           regFeePaid: data.regFeePaid,
         });
       } catch (error) {
+        console.log(error);
         navigate(`/login?path=${location.pathname}`, {
           state: { from: location.pathname },
         });

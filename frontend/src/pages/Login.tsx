@@ -19,6 +19,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function Login() {
+  const [loginInProgress, setLoginInProgress] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -42,7 +43,7 @@ export default function Login() {
   const location = useLocation();
   const target = location.state?.from || "/";
 
-  const { setToken } = useAuth();
+  const { token, setToken } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
@@ -59,11 +60,22 @@ export default function Login() {
 
   async function handleLogin() {
     try {
-      const data = await axios.post("http://localhost:8080/login", formData);
-      setToken(data.data.token);
-      navigate(target);
-    } catch (error) {}
+      const response = await axios.post(
+        "http://localhost:8080/login",
+        formData
+      );
+      setToken(response.data.token);
+    } catch (error) {
+      setLoginInProgress(false);
+    }
   }
+
+  useEffect(() => {
+    if (token) {
+      navigate(target);
+      setLoginInProgress(false);
+    }
+  }, [token, navigate, target]);
 
   return (
     <Grid>
@@ -121,6 +133,7 @@ export default function Login() {
           </FormControl>
           <Button
             onClick={handleLogin}
+            disabled={loginInProgress}
             type="submit"
             color="primary"
             variant="contained"
