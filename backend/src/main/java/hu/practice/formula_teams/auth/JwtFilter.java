@@ -24,35 +24,40 @@ public class JwtFilter extends OncePerRequestFilter {
     private final PathMatcher pathMatcher;
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenBlacklist tokenBlacklist;
 
-    public JwtFilter(PathMatcher pathMatcher, JwtService jwtService, UserDetailsService userDetailsService) {
+    public JwtFilter(PathMatcher pathMatcher, JwtService jwtService, UserDetailsService userDetailsService, TokenBlacklist tokenBlacklist) {
         this.pathMatcher = pathMatcher;
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
+        this.tokenBlacklist = tokenBlacklist;
     }
 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            final String authHeader = request.getHeader("Authorization");
+//            final String authHeader = request.getHeader("Authorization");
             String path = request.getRequestURI();
-            String token = null;
-            String username = null;
-
             if (PUBLIC_URLS.stream().anyMatch(url -> pathMatcher.match(url, path))) {
                 filterChain.doFilter(request, response);
                 return;
             }
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                token = authHeader.substring(7);
-                username = jwtService.extractUsername(token);
-            }
+
+            String token = jwtService.extractToken(request);
+            String username = jwtService.extractUsername(token);
+
+
+//            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+//                token = authHeader.substring(7);
+//                username = jwtService.extractUsername(token);
+//            }
+
             if (token == null) {
                 filterChain.doFilter(request, response);
                 return;
             }
-            if (username != null && SecurityContextHolder.getContext()
+            if ( !tokenBlacklist.isBlacklisted(token) && username != null && SecurityContextHolder.getContext()
                                                       .getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 if (jwtService.validateToken(token, userDetails)) {

@@ -13,6 +13,7 @@ public record TeamDTO(
         String name,
         @NotNull(message = "'yearEstablished' is required")
         @MaxCurrentYear(message = "'yearEstablished' cannot be greater than the current year")
+        @Min(value = 0)
         Integer yearEstablished,
         @NotNull(message = "'championshipsWon' is required")
         Integer championshipsWon,

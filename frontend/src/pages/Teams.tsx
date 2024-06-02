@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Fab,
   Grid,
   Table,
   TableBody,
@@ -19,7 +20,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
+import AddIcon from "@mui/icons-material/Add";
 import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
@@ -89,7 +90,7 @@ export default function Teams() {
   return (
     <>
       <TableContainer
-        sx={{ mt: 10, maxWidth: { xs: "96%", md: "75%" }, mx: "auto" }}
+        sx={{ mt: 10, maxWidth: { xs: "96%", md: "70%" }, mx: "auto" }}
       >
         <Table
           size="small"
@@ -186,7 +187,17 @@ export default function Teams() {
             setRowsPerPage(Number.parseInt(event.target.value))
           }
         />
+        <Fab
+          size="small"
+          variant="extended"
+          color="secondary"
+          onClick={() => navigate("/teams/new")}
+        >
+          <AddIcon />
+          Add new team
+        </Fab>
       </TableContainer>
+
       <Dialog
         open={idToDelete != undefined}
         onClose={() => setIdToDelete(undefined)}
@@ -213,7 +224,7 @@ export default function Teams() {
           <DialogContentText>
             Are you sure you want to permanently delete{" "}
             <Typography fontWeight="bold">
-              {teams.find((team) => team.id === idToDelete)?.name}
+              {teams.find((team) => team.id === idToDelete)?.name}?
             </Typography>
           </DialogContentText>
         </DialogContent>

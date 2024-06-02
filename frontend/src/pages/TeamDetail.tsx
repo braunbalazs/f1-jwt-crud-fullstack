@@ -157,6 +157,10 @@ export default function TeamDetail() {
                 control={control}
                 rules={{
                   required: "'Established in' is required",
+                  min: {
+                    value: 0,
+                    message: "'Established in' cannot be BCE",
+                  },
                   max: {
                     value: new Date().getFullYear(),
                     message: `'Established in cannot be later than ${new Date().getFullYear()}`,

@@ -60,6 +60,7 @@ export default function Login() {
 
   async function handleLogin() {
     try {
+      setLoginInProgress(true);
       const response = await axios.post(
         "http://localhost:8080/login",
         formData
@@ -71,7 +72,7 @@ export default function Login() {
   }
 
   useEffect(() => {
-    if (token) {
+    if (token && loginInProgress) {
       navigate(target);
       setLoginInProgress(false);
     }
@@ -143,7 +144,6 @@ export default function Login() {
           </Button>
         </Grid>
       </Paper>
-      <Typography variant="h3">{location.search}</Typography>
     </Grid>
   );
 }
