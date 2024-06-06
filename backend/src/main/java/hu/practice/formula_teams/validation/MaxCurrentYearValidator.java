@@ -16,9 +16,7 @@ public class MaxCurrentYearValidator implements ConstraintValidator<MaxCurrentYe
 
     @Override
     public boolean isValid(Integer value, ConstraintValidatorContext context) {
-        if(value==null) {
-            return true;
-        }
-        return value <= Year.now().getValue();
+        return value == null || value <= Year.now()
+                                             .getValue();
     }
 }
