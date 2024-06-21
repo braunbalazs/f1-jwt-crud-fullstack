@@ -7,13 +7,10 @@ import hu.practice.formula_teams.model.Team;
 import hu.practice.formula_teams.model.TeamRepository;
 import hu.practice.formula_teams.validation.ObjectsValidator;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class TeamServiceImpl implements TeamService {
